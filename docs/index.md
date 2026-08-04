@@ -1,0 +1,37 @@
+# texLab
+
+**Editor plugin for Unreal Engine 5.8** — pack PBR texture channels, preview before save, batch entire folders, and wire materials without leaving the editor.
+
+## What texLab does
+
+- **Pack** separate maps (Base Color, Normal, AO, Roughness, Metallic, …) into Unreal-friendly outputs (ORM, Masks, BC5 Normal, …)
+- **Repack** existing packed files when channel order must change
+- **Preview** live — Working, Encoded, and Delta modes match **Create Outputs**
+- **Batch** folders with **Validate** first (zero writes) then **Execute**
+- **Trace provenance** on every generated texture
+
+texLab is **editor-only** (Win64). It is not a runtime game plugin.
+
+## Quick links
+
+| Page | Use when |
+|------|----------|
+| [Quick Start (5 min)](quick-start) | First successful Manual pack on shipped demo `/texLab/texLabDemo/` |
+| [Operation Manual](operation-manual) | Full workflows — Manual, Batch, Library, Semantics, Materials |
+| [Glossary](glossary) | ORM, RMA, MaterialBase, provenance, … |
+| [Demo content](demo-content) | Shipped PNG layout and naming |
+
+## Requirements
+
+| Item | Notes |
+|------|--------|
+| **Unreal Engine** | **5.8.x** (Fab descriptor **5.8.0**); verified on **5.7.4** and **5.8.1** |
+| **Platform** | **Win64** editor |
+| **Install** | Copy plugin to `<Project>/Plugins/texLab/`, enable in **Edit → Plugins** |
+
+## Support
+
+- **Email:** [armasonix@gmail.com](mailto:armasonix@gmail.com)
+- **Fab listing:** [texLab on Fab](https://www.fab.com/portal/listings/a53903c7-ae83-4eea-96a8-42178212a3ba)
+
+Offline copy ships inside the plugin: `Plugins/texLab/Resources/Help/operation-manual.md`.

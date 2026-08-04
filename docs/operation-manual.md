@@ -1,0 +1,429 @@
+﻿# texLab Operation Manual
+
+**User guide** for texLab on Unreal Engine **5.8.1** — pack texture channels, batch folders, and wire materials without leaving the editor.
+
+**Engine support:** texLab is officially verified on **UE 5.7.4** and **UE 5.8.1** (Win64). Fab `.uplugin` `EngineVersion`: **5.8.0** (UE major.minor).
+
+For a short in-editor summary open **Tools → texLab → Help & quickstart**.  
+For a timed first pack see **[Quick Start](quick-start)** (≤5 min, shipped `/texLab/texLabDemo/`).
+
+---
+
+## Table of contents
+
+1. [What texLab does](#1-what-texlab-does)
+2. [Before you start](#2-before-you-start)
+3. [Opening texLab](#3-opening-texlab)
+4. [Core ideas (read once)](#4-core-ideas-read-once)
+5. [Demo content and sample project](#5-demo-content-and-sample-project)
+   - [5.0 Five-minute quick start](#50-five-minute-quick-start)
+6. [Manual mode — one material at a time](#6-manual-mode--one-material-at-a-time)
+7. [Batch mode — many materials at once](#7-batch-mode--many-materials-at-once)
+8. [Strategy Library](#8-strategy-library)
+9. [Semantics — naming rules](#9-semantics--naming-rules)
+10. [Pack and Unpack](#10-pack-and-unpack)
+11. [Materials and Material Instances](#11-materials-and-material-instances)
+12. [Material Builder](#12-material-builder)
+13. [Settings](#13-settings)
+14. [Source quality and provenance](#14-source-quality-and-provenance)
+15. [Troubleshooting](#15-troubleshooting)
+
+---
+
+## 1. What texLab does
+
+texLab helps you:
+
+- **Pack** separate maps (Base Color, Normal, AO, Roughness, Metallic, …) into Unreal-friendly outputs (ORM, Masks, BC5 Normal, …).
+- **Repack** existing packed files (`_ORM`, `_ARM`, …) when channel order or layout must change.
+- **Preview** the result live before saving anything.
+- **Batch** entire content folders with validation first (no surprise overwrites).
+- **Create Materials / Material Instances** wired from what you packed.
+- **Trace** what went into each output via provenance on generated textures.
+
+You work in the **editor only** — texLab is not a runtime game plugin.
+
+---
+
+## 2. Before you start
+
+| Requirement | Notes |
+|-------------|--------|
+| **Unreal Engine 5.8.x** | Fab: `texLab.uplugin` → `EngineVersion` **5.8.0** (UE major.minor). Tested on **5.8.1** and **5.7.4**. |
+| **texLab plugin enabled** | Install the plugin into your Unreal project. |
+| **Named textures** | File names carry meaning (`T_Magma_BC`, `T_Magma_Normal`, …). See [Semantics](#9-semantics--naming-rules). |
+| **Output folder** | Default `/Game/texLab/Output` — change in Settings if you prefer. |
+
+**Try the demo:** enable texLab and open **`/texLab/texLabDemo/`** in Content Browser (textures + preview map ship in plugin `Content/`). See [Demo content](#5-demo-content-and-sample-project). Reimport from `Resources/Demo/` only if plugin Content is missing.
+
+---
+
+## 3. Opening texLab
+
+| How | When to use |
+|-----|-------------|
+| **Tools → texLab** | Main panel — Manual, Batch, Library, Settings, Help |
+| **Content Browser → right-click textures → Send to texLab** | Load selection into **Manual** |
+| **Content Browser → right-click folder → Send to texLab Batch Mode** | Add folder to **Batch** scope |
+| **Content Browser → Send to Material Builder** | Wire existing textures into a material (no packing) |
+| **Texture Editor toolbar → texLab** | Send the texture you are editing |
+| **Edit → Project Settings → Plugins → texLab** | Same defaults as the in-panel **Settings** tab |
+
+---
+
+## 4. Core ideas (read once)
+
+### Preview matches export
+
+What you see in **Preview** is what **Create Outputs** (or Batch **Execute**) writes — same pack pipeline. Use **Working / Encoded / Delta** in Preview to check compression look before saving.
+
+### Safe by default
+
+- New textures are **created**; existing assets are **not** overwritten unless you choose **Replace**.
+- **Validate** in Batch runs with **zero writes** — always use it before **Execute** on a big folder.
+
+### Names carry meaning
+
+texLab reads **suffixes** in file names (`_BC`, `_Normal`, `_ORM`, …). Packed acronyms need **explicit rules** in the Semantics database — texLab never guesses channel order from letters alone.
+
+### Pack strategy = which outputs you get
+
+A **pack strategy** (preset) defines outputs (e.g. Masks + ORM + Normal) and how channels are filled. Pick one in Manual or Batch, or browse **Library**.
+
+### One graph for assembly and repack
+
+Whether you start from loose singles or an existing `_ORM`, you use the same Manual panel and strategies — one unified pack graph for assembly and repack.
+
+---
+
+## 5. Demo content and sample project
+
+The plugin ships **pre-imported demo textures and a preview map** in plugin Content, plus **raw PNG source files** for reimport when needed.
+
+### 5.0 Five-minute quick start
+
+**Goal:** First successful Manual pack in **≤5 minutes** using shipped plugin Content — **no PNG import**, no separate sample project.
+
+| Time | Action |
+|------|--------|
+| 0:00 | **Tools → texLab** |
+| 0:30 | **`/texLab/texLabDemo/Textures/Gold/`** → select all → **Send to texLab** |
+| 1:30 | Check **Sources** (confidence + resolve path) |
+| 2:00 | Strategy **Safe — Masks + ORM + Normal** |
+| 2:30 | Preview **Encoded** |
+| 3:30 | **Create Outputs** |
+| 4:30 | Output texture → **Asset User Data** (provenance) |
+
+Full timed table, pass criteria, and troubleshooting: **[Quick Start](quick-start)** (also under `Plugins/texLab/Resources/Help/`). In-editor: **Help & quickstart → Quick Start (5 minutes)**.
+
+### 5.1 Shipped demo assets (default)
+
+After enabling texLab, open Content Browser:
+
+```text
+/texLab/texLabDemo/
+├── Textures/     … 13 material folders + Noise (~72 .uasset)
+└── Maps/
+    └── texLab_Demo_Map
+```
+
+On disk: `Plugins/texLab/Content/texLabDemo/`.
+
+Example asset paths: `/texLab/texLabDemo/Textures/Gold/T_Gold_BC`, `/texLab/texLabDemo/Textures/Magma/T_Magma_BC`.
+
+**No import step** is required for Manual, Batch, or the preview map when using the shipped plugin.
+
+### 5.2 Raw PNG source (`Resources/Demo/`)
+
+PNG files live in the plugin — **one subfolder per material set** (**13 sets + Noise = 71 PNGs**):
+
+```text
+<YourProject>/Plugins/texLab/Resources/Demo/
+├── Brick/, Carpet/, Cliff/, Knit/, Marble/, Plaster/, Sand/, Wood/  … standard PBR + Height
+├── Gold/, Magma/, Scarf/   … full PBR incl. Metallic (+ Specular on Scarf)
+├── Damascus/               … Diff, Glossiness, Specular, Height (legacy names)
+└── Noise/                  … 8 single-map noise textures (_Noise suffix)
+```
+
+**All material folders (13 sets + Noise):**
+
+| Folder | Maps | Notes |
+|--------|------|--------|
+| Brick, Carpet, Cliff, Knit, Marble, Plaster, Sand, Wood | 5 each | BC, Normal, AO, Roughness, Height |
+| **Gold** | 5 | BC, Normal, AO, Roughness, **Metallic** |
+| Magma | 6 | BC, Normal, AO, Roughness, Metallic, Height |
+| Scarf | 7 | BC, Normal, AO, Roughness, Metallic, Specular, Height |
+| Damascus | 5 | Diff, Normal, Glossiness, Specular, Height |
+| Noise | 8 | single `_Noise` maps (Blue, Bnw, Cloud, …) |
+
+Exact file names: [`Resources/Demo/README.md`](demo-content).
+
+**Naming rules for PNGs**
+
+- Keep **`T_` prefix** and suffixes: `_BC`, `_Normal`, `_AO`, `_Roughness`, `_Metallic`, `_Height`, `_Glossiness`, `_Specular`, `_Diff`, `_Noise`.
+- Names must match shipped `.uasset` names and any PNGs you reimport (see below).
+
+Use **`Resources/Demo/`** when plugin Content is missing, or when you want copies under your **project** Content (`/Game/...`).
+
+### 5.3 Optional reimport into project Content
+
+Only if **`/texLab/texLabDemo/`** is not present (custom build) or you prefer project-local assets:
+
+| Step | Action |
+|------|--------|
+| 1 | Open your Unreal project with texLab enabled. |
+| 2 | In Content Browser create **`/Game/texLabDemo/Textures/`** (or another folder you will scope in Batch). |
+| 3 | For each material set, create a subfolder: `Brick`, **Gold**, `Magma`, `Damascus`, `Noise`, … (all **13** material folders when complete). |
+| 4 | **Import** PNGs from `Plugins/texLab/Resources/Demo/<Folder>/` into that folder. |
+| 5 | Leave **source files on disk** linked (default import) — best for [provenance](#14-source-quality-and-provenance). |
+
+After import, asset paths look like `/Game/texLabDemo/Textures/Gold/T_Gold_BC`. Batch scope would be `/Game/texLabDemo` instead of `/texLab/texLabDemo`.
+
+### 5.4 Preview level (Material Instances)
+
+Shipped preview map:
+
+```text
+/texLab/texLabDemo/Maps/texLab_Demo_Map
+```
+
+Open it to assign **Material Instances** you create with texLab (Manual **Create Material Instance** or Batch). Typical meshes: **plane** (tiling / Normal), **cube** (ORM / Masks), **sphere** (Normal preview).
+
+Optional for packing; useful for **visual MI verification**. If you reimported demo textures under `/Game/texLabDemo/`, create or copy a preview map there.
+
+### 5.5 Which demo folder for which exercise
+
+| Folder | Good for |
+|--------|----------|
+| **Gold**, **Magma**, **Scarf** | Full Safe pack (BC + AO + Roughness + Metallic + Normal) |
+| **Damascus** | **Diff**, **Glossiness**, **Specular**, Height (legacy naming) |
+| **Brick**, **Sand**, **Wood**, … | Standard sets with **Height** (env-style strategies) |
+| **Noise** | Single-map **Noise** semantic (Manual; Batch = one texture per group) |
+
+---
+
+## 6. Manual mode — one material at a time
+
+**Layout:** Sources (left) · Channel graph (center) · Preview (right).
+
+### Quick workflow
+
+1. **Add sources** — picker, drag-and-drop, or **Send to texLab** from Content Browser.  
+   *Demo:* select all textures in `/texLab/texLabDemo/Textures/Gold/` or `/texLab/texLabDemo/Textures/Magma/` → Send to texLab.
+
+2. **Check Sources list** — each row shows **match confidence** and **where pixels were read from** (file on disk vs embedded).
+
+3. **Choose Pack strategy** — combo in the graph or **Activate** in Library.  
+   *Demo:* try **Safe — Masks + ORM + Normal** on **Gold** or **Magma**.
+
+4. **Preset combo** — picks which **output** you preview and edit in the graph. **Create Outputs** still writes **every** output in the strategy.
+
+5. **Adjust channels** — invert, contrast, levels; map extra semantics to Normal B/A if needed. Preview updates after a short pause.
+
+6. **Preview modes** — **Working** (float), **Encoded** (BC7/BC5 round-trip), **Delta** (error view).
+
+7. **Naming** — stem for `T_` / `M_` / `MI_` outputs (defaults from source names).
+
+8. **Pack / Unpack** — toolbar mode: **Pack** creates packed outputs; **Unpack** splits packed inputs into singles.
+
+9. **Create Outputs** — writes new textures under your **Output folder** (default `/Game/texLab/Output`).
+
+10. **Optional** — **Create Material** and/or **Create Material Instance** from the same job.
+
+### Tips
+
+- **Base Color** uses full RGB — not grayscale from red only.
+- **Normal** stores XY in BC5; if B/A carry Roughness or Metallic, texLab may write **Masks** instead so data is not lost.
+- **Undo** works for graph changes (Ctrl+Z).
+
+---
+
+## 7. Batch mode — many materials at once
+
+**Layout:** Scope · Grouping · Plan · Results.
+
+### Recommended workflow
+
+1. **Scope** — add `/texLab/texLabDemo` (Browse, drag folder, or **Send to texLab Batch Mode**).
+
+2. **Scan** — finds textures under scope.
+
+3. **Rebuild Groups** — clusters by **material name** (e.g. all `T_Magma_*` → group **Magma**).
+
+4. **Pack strategy** — pick one; use **Suggest** for a Safe recommendation.
+
+5. **Validate** (toolbar) — full check: semantics, missing inputs, planned output names. Opens **Message Log (texLab)**. **No files written.**
+
+6. Review the log — fix naming or add missing maps, then **Validate** again.
+
+7. **Execute** — runs jobs in chunks; cancel or retry from **Results**.
+
+8. **Pack / Unpack** — same as Manual; Unpack produces singles from packed sources.
+
+### Validate vs Preview output names
+
+| Action | What it does |
+|--------|----------------|
+| **Validate** | Full dry-run + Message Log — use before Execute |
+| **Preview output names** (Plan pane) | Quick name list only — skips semantic checks |
+
+Execute warns if you skipped Validate or issues remain.
+
+### Demo expectation for `/texLab/texLabDemo`
+
+After **Rebuild Groups** you should see **13 material groups** (Brick, Carpet, Cliff, Damascus, **Gold**, Knit, Magma, Marble, Plaster, Sand, Scarf, Wood) plus **8 single-texture Noise groups** (Blue, Bnw, Cloud, Combo, Combo2, Fractal, Perlin, Voronoi). **Validate** should report planned outputs under your Output folder without writing assets.
+
+---
+
+## 8. Strategy Library
+
+The **Library** tab lists **pack strategies** (shipped and project copies).
+
+| Action | Result |
+|--------|--------|
+| **Browse** | Read description and **Safe / Compact** badge |
+| **Texture Guide** | Explains each output map for the selected strategy |
+| **Activate** | Loads strategy into **Manual** |
+| **Duplicate / Edit / Save** | Project copies under `Config/texLab` or Presets |
+
+**Safe** — channel meaning stays straightforward.  
+**Compact** — may bake derived data at pack time; check the badge and Preview **Encoded** before shipping.
+
+Set your **default strategy** in [Settings](#13-settings) — Manual and Batch start with it.
+
+---
+
+## 9. Semantics — naming rules
+
+Open the **Semantics** tab to view or edit rules.
+
+### Examples (single maps)
+
+| Suffix | Meaning |
+|--------|---------|
+| `_BC`, `_BaseColor`, `_Albedo`, `_Diff` | Base Color (RGB) |
+| `_Normal`, `_N` | Normal map XY |
+| `_AO` | Ambient occlusion |
+| `_Roughness`, `_Rough` | Roughness |
+| `_Metallic`, `_Metal` | Metallic |
+| `_Height`, `_H` | Height |
+| `_Noise` | Noise (env compact) |
+| `_Glossiness` | Glossiness (converted to roughness when needed) |
+| `_Specular` | Specular |
+
+### Packed maps (must be in the database)
+
+| Suffix | Channel order (example) |
+|--------|-------------------------|
+| `_ORM` | R=AO, G=Roughness, B=Metallic |
+| `_ARM` | R=AO, G=Roughness, B=Metallic (explicit rule — not the same as ORM letters reordered) |
+| `_RMA`, `_MSR`, … | Each has its own rule — see Semantics tab |
+
+**Match tester** — type a sample file name before batching a huge folder.
+
+After **Save Config**, Manual and Batch pick up changes immediately.
+
+Full reference: `Plugins/texLab/Resources/Semantics/README.md` (shipped in plugin).
+
+---
+
+## 10. Pack and Unpack
+
+| Mode | Input | Output |
+|------|--------|--------|
+| **Pack** | Loose singles (and/or packed) | Packed + Normal outputs per strategy |
+| **Unpack** | Packed layouts supported by texLab | Separate `_AO`, `_Roughness`, `_Metallic`, `_BC`, `_N`, … |
+
+Use **Unpack** when you need to split marketplace ORM into singles for editing, then **Pack** again with your studio layout.
+
+Unknown packed acronyms (e.g. `_OMR`) **fail with an error** — add a Semantics rule or fix the name.
+
+---
+
+## 11. Materials and Material Instances
+
+From Manual Preview or Batch Execute you can:
+
+- **Create Material** — builds a material graph with texture samples and wires to Base Color, Normal, Roughness, AO, Metallic, etc.
+- **Create Material Instance** — instance of that material (or parent picker for legacy flow).
+
+**Material template** — pick a JSON template or leave **Auto** to match the active strategy.
+
+**Add to existing Material** — appends samples and wires **without** wiping the graph (Manual checkbox + Batch option). Skipped pins are listed as warnings.
+
+Test on **`/texLab/texLabDemo/Maps/texLab_Demo_Map`**: assign the new MI to cube / sphere / plane.
+
+---
+
+## 12. Material Builder
+
+When textures are **already packed** and you only need them in a graph:
+
+1. Open **Material Builder** tab (or **Send to Material Builder** from Content Browser).
+2. Add textures and target Material.
+3. **Build** — samples and wires only; no pack pipeline.
+
+---
+
+## 13. Settings
+
+**Settings** tab (or Project Settings → Plugins → texLab):
+
+| Setting | What it controls |
+|---------|------------------|
+| **Output folder** | Where new textures (and optional M/MI) are saved |
+| **Preview size** | Live preview resolution (256 / 512 / 1024) |
+| **Resolution policy** | When source sizes differ — which size wins |
+| **Default pack strategy** | Loaded when you open Manual or Batch |
+| **Overwrite policy** | Create New vs Replace |
+| **Source fidelity** | Whether degraded/platform fallbacks are allowed for Replace |
+
+Changes apply to new sessions; save project to persist overrides in `DefaultEditor.ini`.
+
+---
+
+## 14. Source quality and provenance
+
+### Source quality (Manual Sources list)
+
+| Source | Quality | Notes |
+|--------|---------|--------|
+| **Import file on disk** | Best | Prefer this — link PNGs from `Resources/Demo/` |
+| **Embedded source** | Good | When no file exists on disk |
+| **Derived / platform** | Degraded | Replace may be blocked unless Settings allow it |
+
+### Provenance (after Create Outputs / Execute)
+
+Select a **generated texture** → **Details** → **Asset User Data** — job id, strategy, sources, quality tier.
+
+**Demo check:** pack **Gold** or **Magma**, open output `T_Gold_ORM` / `T_Magma_ORM` (or your stem), inspect provenance fields.
+
+---
+
+## 15. Troubleshooting
+
+| Problem | What to try |
+|---------|-------------|
+| Low match confidence | Fix suffix (`_Roughness` not `_Roughh`); check Semantics tab |
+| Missing input on Validate | Add map or pick a strategy that needs fewer semantics |
+| Preview black / wrong | Check channel graph — semantic assigned? Invert? |
+| ORM looks shiny/wrong | Preview **Encoded**; check Normal B/A not stealing Roughness |
+| Batch group too many / too few | Names must share MaterialBase (`T_Magma_*` not mixed stems); Noise maps group alone |
+| Execute blocked | Run **Validate**; read Message Log (texLab) |
+| Output not in Content Browser | Check **Output folder** in Settings; refresh folder |
+| Replace did nothing | Default is **Create New** — names may get suffix; or degraded source blocked |
+
+Message Log category: **texLab**.
+
+---
+
+## Related documents
+
+| Document | Audience |
+|----------|----------|
+| [Glossary](glossary) | ORM, RMA, MaterialBase, … |
+| In-editor **Help & quickstart** | Short tab with links to Manual, Batch, … |
+
+---
+
+*texLab Operation Manual — Unreal Engine 5.8.1 (verified 5.7.4 + 5.8.1).*

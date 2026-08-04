@@ -1,0 +1,62 @@
+﻿# texLab Quick Start (≤5 minutes)
+
+**Goal:** First successful **Manual pack** using **shipped plugin Content** — no PNG import, no sample project required.
+
+**Engine:** Unreal Engine **5.8.1** (Win64). Also verified on **5.7.4**.
+
+**Prerequisites**
+
+- texLab enabled (**Edit → Plugins**).
+- Content Browser shows **`/texLab/texLabDemo/`** (shipped plugin Content).
+- Default output folder unchanged (**Settings → Output folder** = `/Game/texLab/Output`).
+
+Open the in-editor copy of this walkthrough: **Tools → texLab → Help & quickstart → Quick Start (5 minutes)**.
+
+---
+
+## Timed walkthrough
+
+| Time | Step | Pass |
+|------|------|------|
+| **0:00** | **Tools → texLab** — panel opens on Help or Manual | Panel visible |
+| **0:30** | Content Browser → **`/texLab/texLabDemo/Textures/Gold/`** — select all textures | 5 assets selected |
+| **1:00** | Right-click → **Send to texLab** | Manual tab; Sources populated |
+| **1:30** | Inspect **Sources** — each row shows **match confidence** and **resolve path** (prefer import file on disk) | Confidence > 0; paths readable |
+| **2:00** | Choose pack strategy **Safe — Masks + ORM + Normal** (Manual combo or **Library → Activate**) | Preview updates |
+| **2:30** | Preview toolbar → **Encoded** | No crash; ORM + Normal plausible |
+| **3:30** | Click **Create Outputs** | Toast / status success |
+| **4:00** | Content Browser → **`/Game/texLab/Output`** (or your configured folder) | New `T_` / `M_` textures appear |
+| **4:30** | Select one **generated** texture → **Details → Asset User Data** | Provenance record present |
+| **≤5:00** | Done — first pack complete | — |
+
+**Optional (same session, +3–5 min):** open **Batch** → scope **`/texLab/texLabDemo`** → **Scan** → **Rebuild Groups** → **Validate** (zero writes). See [Operation Manual](operation-manual) §7.
+
+---
+
+## Demo assets (shipped layout)
+
+| Item | Path |
+|------|------|
+| Demo textures | **`/texLab/texLabDemo/Textures/`** — 13 material folders + **Noise** (~72 `.uasset`) |
+| Example set | **`/texLab/texLabDemo/Textures/Gold/`** — `T_Gold_BC`, `_Normal`, `_AO`, `_Roughness`, `_Metallic` |
+| Alternate set | **`/texLab/texLabDemo/Textures/Magma/`** — full PBR + Height |
+| Preview map | **`/texLab/texLabDemo/Maps/texLab_Demo_Map`** — optional MI visual check |
+| PNG fallback | **`Plugins/texLab/Resources/Demo/`** — only if plugin Content missing (71 PNGs) |
+
+**Not required:** a separate sample **project** zip, PNG reimport, or opening the demo map for this quick start.
+
+---
+
+## Troubleshooting (quick)
+
+| Symptom | Fix |
+|---------|-----|
+| No `/texLab/texLabDemo/` | Reinstall plugin zip with `Content/texLabDemo/`; enable texLab; restart editor |
+| Send to texLab missing | Enable plugin; right-click **textures** (not folders) for Manual |
+| Confidence always zero | Check asset names (`T_Gold_BC`, …); open **Semantics** tab |
+| Create Outputs empty folder | **Settings → Output folder**; check Message Log (texLab) for errors |
+| No provenance on output | Retry after successful Create Outputs; inspect **Asset User Data** on output `.uasset` |
+
+Full guide: [Operation Manual](operation-manual) §5–§7.
+
+---

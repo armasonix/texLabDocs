@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.page/schema.json",
+  "name": "texLab",
+  "description": "Unreal Engine editor plugin for PBR texture channel packing, live preview, and semantic-aware batch orchestration.",
+  "theme": {
+    "primary": "#0e7490"
+  },
+  "sidebar": [
+    {
+      "group": "Get started",
+      "pages": [
+        { "page": "index", "title": "Overview" },
+        { "page": "quick-start", "title": "Quick Start (5 min)" }
+      ]
+    },
+    {
+      "group": "User guide",
+      "pages": [
+        { "page": "operation-manual", "title": "Operation Manual" }
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        { "page": "glossary", "title": "Glossary" },
+        { "page": "demo-content", "title": "Demo content" }
+      ]
+    }
+  ],
+  "anchors": [
+    {
+      "title": "Fab",
+      "icon": "shopping-cart",
+      "href": "https://www.fab.com/portal/listings/a53903c7-ae83-4eea-96a8-42178212a3ba"
+    },
+    {
+      "title": "Support",
+      "icon": "mail",
+      "href": "mailto:armasonix@gmail.com"
+    }
+  ]
+}
