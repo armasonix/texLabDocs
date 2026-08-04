@@ -208,10 +208,6 @@ Optional for packing; useful for **visual MI verification**. If you reimported d
 
 ## 6. Manual mode — one material at a time
 
-![Manual mode — Sources, channel graph, and Preview](/assets/manual-mode.png)
-
-**Layout:** Sources (left) · Channel graph (center) · Preview (right).
-
 ### Quick workflow
 
 1. **Add sources** — picker, drag-and-drop, or **Send to texLab** from Content Browser.  
@@ -236,6 +232,10 @@ Optional for packing; useful for **visual MI verification**. If you reimported d
 
 10. **Optional** — **Create Material** and/or **Create Material Instance** from the same job.
 
+![Manual mode — Sources, channel graph, and Preview](/assets/manual-mode.png)
+
+**Layout:** Sources (left) · Channel graph (center) · Preview (right).
+
 ### Tips
 
 - **Base Color** uses full RGB — not grayscale from red only.
@@ -247,10 +247,6 @@ Optional for packing; useful for **visual MI verification**. If you reimported d
 ![Batch mode](/assets/batch.png)
 
 ## 7. Batch mode — many materials at once
-
-![Batch mode — Scope, grouping, plan, and results](/assets/batch-mode.png)
-
-**Layout:** Scope · Grouping · Plan · Results.
 
 ### Recommended workflow
 
@@ -269,6 +265,10 @@ Optional for packing; useful for **visual MI verification**. If you reimported d
 7. **Execute** — runs jobs in chunks; cancel or retry from **Results**.
 
 8. **Pack / Unpack** — same as Manual; Unpack produces singles from packed sources.
+
+![Batch mode — Scope, grouping, plan, and results](/assets/batch-mode.png)
+
+**Layout:** Scope · Grouping · Plan · Results.
 
 ### Validate vs Preview output names
 
@@ -289,16 +289,16 @@ After **Rebuild Groups** you should see **13 material groups** (Brick, Carpet, C
 
 ## 8. Strategy Library
 
-![texLab main panel — open the Library tab from the toolbar](/assets/manual-mode.png)
-
-The **Library** tab lists **pack strategies** (shipped and project copies).
-
 | Action | Result |
 |--------|--------|
 | **Browse** | Read description and **Safe / Compact** badge |
 | **Texture Guide** | Explains each output map for the selected strategy |
 | **Activate** | Loads strategy into **Manual** |
 | **Duplicate / Edit / Save** | Project copies under `Config/texLab` or Presets |
+
+![texLab main panel — open the Library tab from the toolbar](/assets/manual-mode.png)
+
+The **Library** tab lists **pack strategies** (shipped and project copies).
 
 **Safe** — channel meaning stays straightforward.  
 **Compact** — may bake derived data at pack time; check the badge and Preview **Encoded** before shipping.
@@ -310,8 +310,6 @@ Set your **default strategy** in [Settings](#13-settings) — Manual and Batch s
 ![Semantics](/assets/semantics.png)
 
 ## 9. Semantics — naming rules
-
-![texLab main panel — open the Semantics tab from the toolbar](/assets/manual-mode.png)
 
 Open the **Semantics** tab to view or edit rules.
 
@@ -336,6 +334,8 @@ Open the **Semantics** tab to view or edit rules.
 | `_ORM` | R=AO, G=Roughness, B=Metallic |
 | `_ARM` | R=AO, G=Roughness, B=Metallic (explicit rule — not the same as ORM letters reordered) |
 | `_RMA`, `_MSR`, … | Each has its own rule — see Semantics tab |
+
+![texLab main panel — open the Semantics tab from the toolbar](/assets/manual-mode.png)
 
 **Match tester** — type a sample file name before batching a huge folder.
 
@@ -377,21 +377,19 @@ Test on **`/texLab/texLabDemo/Maps/texLab_Demo_Map`**: assign the new MI to cube
 
 ## 12. Material Builder
 
-![texLab main panel — open the Builder tab from the toolbar](/assets/manual-mode.png)
-
 When textures are **already packed** and you only need them in a graph:
 
 1. Open **Material Builder** tab (or **Send to Material Builder** from Content Browser).
 2. Add textures and target Material.
 3. **Build** — samples and wires only; no pack pipeline.
 
+![texLab main panel — open the Builder tab from the toolbar](/assets/manual-mode.png)
+
 ---
 
 ![Settings](/assets/settings.png)
 
 ## 13. Settings
-
-![texLab main panel — open the Settings tab from the toolbar](/assets/manual-mode.png)
 
 **Settings** tab (or Project Settings → Plugins → texLab):
 
@@ -403,6 +401,8 @@ When textures are **already packed** and you only need them in a graph:
 | **Default pack strategy** | Loaded when you open Manual or Batch |
 | **Overwrite policy** | Create New vs Replace |
 | **Source fidelity** | Whether degraded/platform fallbacks are allowed for Replace |
+
+![texLab main panel — open the Settings tab from the toolbar](/assets/manual-mode.png)
 
 Changes apply to new sessions; save project to persist overrides in `DefaultEditor.ini`.
 
