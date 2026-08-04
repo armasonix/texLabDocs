@@ -5,6 +5,12 @@
   "theme": {
     "primary": "#0e7490"
   },
+  "logo": {
+    "light": "/assets/logo-light.png",
+    "dark": "/assets/logo-dark.png"
+  },
+  "favicon": "/assets/favicon.png",
+  "zoomImages": true,
   "sidebar": [
     {
       "group": "Get started",
