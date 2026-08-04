@@ -4,7 +4,7 @@ Shipped **raw PNG** samples for the texLab demo and Fab review. **Default:** use
 
 Full walkthrough: [Operation Manual](operation-manual).
 
-**Inventory (2026-08):** **13 material sets** + **Noise** folder = **71 PNG** files total.
+**Inventory (2026-08):** **13 material sets** + **Noise** folder = **80 PNG** files total.
 
 ---
 
@@ -13,18 +13,18 @@ Full walkthrough: [Operation Manual](operation-manual).
 ```text
 Plugins/texLab/Resources/Demo/
 ├── README.md
-├── Brick/          (5)  T_Brick_BC, T_Brick_Normal, T_Brick_AO, T_Brick_Roughness, T_Brick_Height
-├── Carpet/         (5)  full PBR-style set + Height
-├── Cliff/          (5)  full PBR-style set + Height
+├── Brick/          (6)  BC, Normal, AO, Roughness, Metallic, Height
+├── Carpet/         (6)  full PBR set + Height
+├── Cliff/          (6)  full PBR set + Height
 ├── Damascus/       (5)  T_Damascus_Diff, Normal, Glossiness, Specular, Height  (legacy channel names)
-├── Gold/           (5)  full PBR set incl. Metallic
-├── Knit/           (5)  full PBR-style set + Height
-├── Magma/          (6)  full PBR set incl. Metallic + Height
-├── Marble/         (5)  full PBR-style set + Height
-├── Plaster/        (5)  full PBR-style set + Height
-├── Sand/           (5)  full PBR-style set + Height
-├── Scarf/          (7)  full PBR set incl. Metallic, Specular, Height
-├── Wood/           (5)  full PBR-style set + Height
+├── Gold/           (6)  full PBR set + Height
+├── Knit/           (6)  full PBR set + Height
+├── Magma/          (6)  full PBR set + Height
+├── Marble/         (6)  full PBR set + Height
+├── Plaster/        (6)  full PBR set + Height
+├── Sand/           (6)  full PBR set + Height
+├── Scarf/          (7)  full PBR set + Specular + Height
+├── Wood/           (6)  full PBR set + Height
 └── Noise/          (8)  T_Blue_Noise, T_Bnw_Noise, T_Cloud_Noise, T_Combo_Noise, T_Combo2_Noise,
                          T_Fractal_Noise, T_Perlin_Noise, T_Voronoi_Noise
 ```
@@ -41,18 +41,18 @@ Content Browser path: **`/texLab/texLabDemo/Textures/<Folder>/`**.
 
 | Folder | PNG files |
 |--------|-------------|
-| **Brick** | `T_Brick_AO`, `T_Brick_BC`, `T_Brick_Height`, `T_Brick_Normal`, `T_Brick_Roughness` |
-| **Carpet** | `T_Carpet_AO`, `T_Carpet_BC`, `T_Carpet_Height`, `T_Carpet_Normal`, `T_Carpet_Roughness` |
-| **Cliff** | `T_Cliff_AO`, `T_Cliff_BC`, `T_Cliff_Height`, `T_Cliff_Normal`, `T_Cliff_Roughness` |
+| **Brick** | `T_Brick_AO`, `T_Brick_BC`, `T_Brick_Height`, `T_Brick_Metallic`, `T_Brick_Normal`, `T_Brick_Roughness` |
+| **Carpet** | `T_Carpet_AO`, `T_Carpet_BC`, `T_Carpet_Height`, `T_Carpet_Metallic`, `T_Carpet_Normal`, `T_Carpet_Roughness` |
+| **Cliff** | `T_Cliff_AO`, `T_Cliff_BC`, `T_Cliff_Height`, `T_Cliff_Metallic`, `T_Cliff_Normal`, `T_Cliff_Roughness` |
 | **Damascus** | `T_Damascus_Diff`, `T_Damascus_Glossiness`, `T_Damascus_Height`, `T_Damascus_Normal`, `T_Damascus_Specular` |
-| **Gold** | `T_Gold_AO`, `T_Gold_BC`, `T_Gold_Metallic`, `T_Gold_Normal`, `T_Gold_Roughness` |
-| **Knit** | `T_Knit_AO`, `T_Knit_BC`, `T_Knit_Height`, `T_Knit_Normal`, `T_Knit_Roughness` |
+| **Gold** | `T_Gold_AO`, `T_Gold_BC`, `T_Gold_Height`, `T_Gold_Metallic`, `T_Gold_Normal`, `T_Gold_Roughness` |
+| **Knit** | `T_Knit_AO`, `T_Knit_BC`, `T_Knit_Height`, `T_Knit_Metallic`, `T_Knit_Normal`, `T_Knit_Roughness` |
 | **Magma** | `T_Magma_AO`, `T_Magma_BC`, `T_Magma_Height`, `T_Magma_Metallic`, `T_Magma_Normal`, `T_Magma_Roughness` |
-| **Marble** | `T_Marble_AO`, `T_Marble_BC`, `T_Marble_Height`, `T_Marble_Normal`, `T_Marble_Roughness` |
-| **Plaster** | `T_Plaster_AO`, `T_Plaster_BC`, `T_Plaster_Height`, `T_Plaster_Normal`, `T_Plaster_Roughness` |
-| **Sand** | `T_Sand_AO`, `T_Sand_BC`, `T_Sand_Height`, `T_Sand_Normal`, `T_Sand_Roughness` |
+| **Marble** | `T_Marble_AO`, `T_Marble_BC`, `T_Marble_Height`, `T_Marble_Metallic`, `T_Marble_Normal`, `T_Marble_Roughness` |
+| **Plaster** | `T_Plaster_AO`, `T_Plaster_BC`, `T_Plaster_Height`, `T_Plaster_Metallic`, `T_Plaster_Normal`, `T_Plaster_Roughness` |
+| **Sand** | `T_Sand_AO`, `T_Sand_BC`, `T_Sand_Height`, `T_Sand_Metallic`, `T_Sand_Normal`, `T_Sand_Roughness` |
 | **Scarf** | `T_Scarf_AO`, `T_Scarf_BC`, `T_Scarf_Height`, `T_Scarf_Metallic`, `T_Scarf_Normal`, `T_Scarf_Roughness`, `T_Scarf_Specular` |
-| **Wood** | `T_Wood_AO`, `T_Wood_BC`, `T_Wood_Height`, `T_Wood_Normal`, `T_Wood_Roughness` |
+| **Wood** | `T_Wood_AO`, `T_Wood_BC`, `T_Wood_Height`, `T_Wood_Metallic`, `T_Wood_Normal`, `T_Wood_Roughness` |
 | **Noise** | `T_Blue_Noise`, `T_Bnw_Noise`, `T_Cloud_Noise`, `T_Combo_Noise`, `T_Combo2_Noise`, `T_Fractal_Noise`, `T_Perlin_Noise`, `T_Voronoi_Noise` |
 
 ---
@@ -100,9 +100,8 @@ Open the preview map to assign Material Instances created with texLab (cube / sp
 
 | Folder | Good for |
 |--------|----------|
-| **Magma**, **Gold**, **Scarf** | Full **Safe** pack (BC + AO + Roughness + Metallic + Normal) |
+| **Brick**, **Carpet**, **Cliff**, **Gold**, **Knit**, **Magma**, **Marble**, **Plaster**, **Sand**, **Scarf**, **Wood** | Full **Safe** pack (BC + AO + Roughness + Metallic + Normal); **Height** for env-style strategies |
 | **Damascus** | **Glossiness**, **Specular**, **Diff** (legacy naming) |
-| **Brick**, **Sand**, **Wood**, … | Standard sets with **Height** (env-style strategies) |
 | **Noise** | Single-map **Noise** semantic; Batch = one texture per group |
 
 **Batch scope:** add **`/texLab/texLabDemo`** (or `/texLab/texLabDemo/Textures`) → Scan → Rebuild Groups → expect **13 material groups** (Brick … Wood) plus **8 single-texture Noise groups**.

@@ -124,7 +124,7 @@ After enabling texLab, open Content Browser:
 
 ```text
 /texLab/texLabDemo/
-├── Textures/     … 13 material folders + Noise (~72 .uasset)
+├── Textures/     … 13 material folders + Noise (~80 .uasset when synced to Demo PNGs)
 └── Maps/
     └── texLab_Demo_Map
 ```
@@ -137,13 +137,13 @@ Example asset paths: `/texLab/texLabDemo/Textures/Gold/T_Gold_BC`, `/texLab/texL
 
 ### 5.2 Raw PNG source (`Resources/Demo/`)
 
-PNG files live in the plugin — **one subfolder per material set** (**13 sets + Noise = 71 PNGs**):
+PNG files live in the plugin — **one subfolder per material set** (**13 sets + Noise = 80 PNGs**):
 
 ```text
 <YourProject>/Plugins/texLab/Resources/Demo/
-├── Brick/, Carpet/, Cliff/, Knit/, Marble/, Plaster/, Sand/, Wood/  … standard PBR + Height
-├── Gold/, Magma/, Scarf/   … full PBR incl. Metallic (+ Specular on Scarf)
-├── Damascus/               … Diff, Glossiness, Specular, Height (legacy names)
+├── Brick/, Carpet/, Cliff/, Knit/, Marble/, Plaster/, Sand/, Wood/  … full PBR + Height (6 maps each)
+├── Gold/, Magma/, Scarf/   … full PBR + Height (+ Specular on Scarf)
+├── Damascus/               … Diff, Glossiness, Specular, Height (legacy names; no Metallic)
 └── Noise/                  … 8 single-map noise textures (_Noise suffix)
 ```
 
@@ -151,9 +151,7 @@ PNG files live in the plugin — **one subfolder per material set** (**13 sets +
 
 | Folder | Maps | Notes |
 |--------|------|--------|
-| Brick, Carpet, Cliff, Knit, Marble, Plaster, Sand, Wood | 5 each | BC, Normal, AO, Roughness, Height |
-| **Gold** | 5 | BC, Normal, AO, Roughness, **Metallic** |
-| Magma | 6 | BC, Normal, AO, Roughness, Metallic, Height |
+| Brick, Carpet, Cliff, Gold, Knit, Magma, Marble, Plaster, Sand, Wood | 6 each | BC, Normal, AO, Roughness, **Metallic**, Height |
 | Scarf | 7 | BC, Normal, AO, Roughness, Metallic, Specular, Height |
 | Damascus | 5 | Diff, Normal, Glossiness, Specular, Height |
 | Noise | 8 | single `_Noise` maps (Blue, Bnw, Cloud, …) |
@@ -197,9 +195,8 @@ Optional for packing; useful for **visual MI verification**. If you reimported d
 
 | Folder | Good for |
 |--------|----------|
-| **Gold**, **Magma**, **Scarf** | Full Safe pack (BC + AO + Roughness + Metallic + Normal) |
+| **Brick**, **Carpet**, **Cliff**, **Gold**, **Knit**, **Magma**, **Marble**, **Plaster**, **Sand**, **Scarf**, **Wood** | Full **Safe** pack (BC + AO + Roughness + Metallic + Normal); **Height** for env-style strategies |
 | **Damascus** | **Diff**, **Glossiness**, **Specular**, Height (legacy naming) |
-| **Brick**, **Sand**, **Wood**, … | Standard sets with **Height** (env-style strategies) |
 | **Noise** | Single-map **Noise** semantic (Manual; Batch = one texture per group) |
 
 ---
@@ -289,6 +286,8 @@ After **Rebuild Groups** you should see **13 material groups** (Brick, Carpet, C
 
 ## 8. Strategy Library
 
+The **Library** tab lists **pack strategies** (shipped and project copies).
+
 | Action | Result |
 |--------|--------|
 | **Browse** | Read description and **Safe / Compact** badge |
@@ -296,9 +295,7 @@ After **Rebuild Groups** you should see **13 material groups** (Brick, Carpet, C
 | **Activate** | Loads strategy into **Manual** |
 | **Duplicate / Edit / Save** | Project copies under `Config/texLab` or Presets |
 
-![texLab main panel — open the Library tab from the toolbar](/assets/manual-mode.png)
-
-The **Library** tab lists **pack strategies** (shipped and project copies).
+![texLab main panel — open the Library tab from the toolbar](/assets/library.png)
 
 **Safe** — channel meaning stays straightforward.  
 **Compact** — may bake derived data at pack time; check the badge and Preview **Encoded** before shipping.
@@ -335,7 +332,7 @@ Open the **Semantics** tab to view or edit rules.
 | `_ARM` | R=AO, G=Roughness, B=Metallic (explicit rule — not the same as ORM letters reordered) |
 | `_RMA`, `_MSR`, … | Each has its own rule — see Semantics tab |
 
-![texLab main panel — open the Semantics tab from the toolbar](/assets/manual-mode.png)
+![texLab main panel — open the Semantics tab from the toolbar](/assets/sem.png)
 
 **Match tester** — type a sample file name before batching a huge folder.
 
@@ -369,6 +366,8 @@ From Manual Preview or Batch Execute you can:
 
 **Add to existing Material** — appends samples and wires **without** wiping the graph (Manual checkbox + Batch option). Skipped pins are listed as warnings.
 
+![Materils and MI](/assets/mats.png)
+
 Test on **`/texLab/texLabDemo/Maps/texLab_Demo_Map`**: assign the new MI to cube / sphere / plane.
 
 ---
@@ -383,7 +382,7 @@ When textures are **already packed** and you only need them in a graph:
 2. Add textures and target Material.
 3. **Build** — samples and wires only; no pack pipeline.
 
-![texLab main panel — open the Builder tab from the toolbar](/assets/manual-mode.png)
+![texLab main panel — open the Builder tab from the toolbar](/assets/mat-builder.png)
 
 ---
 
@@ -402,7 +401,7 @@ When textures are **already packed** and you only need them in a graph:
 | **Overwrite policy** | Create New vs Replace |
 | **Source fidelity** | Whether degraded/platform fallbacks are allowed for Replace |
 
-![texLab main panel — open the Settings tab from the toolbar](/assets/manual-mode.png)
+![texLab main panel — open the Settings tab from the toolbar](/assets/set.png)
 
 Changes apply to new sessions; save project to persist overrides in `DefaultEditor.ini`.
 
